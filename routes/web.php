@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\logoutController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PostController;
+use App\Livewire\LikePost;
 use Illuminate\Support\Facades\Route;
 
 /* Ruta agrupada 
@@ -15,9 +18,7 @@ Route::controller()->group(function(){
     
 }); */
 
-Route::get('/', function () {
-    return view('principal');
-});
+Route::get('/', HomeController::class)->name('home');
 
 Route::controller(RegisterController::class)->group(function(){
     Route::get('/crear-cuenta', 'index')->name('registrate.index');
@@ -56,8 +57,12 @@ Route::controller(ComentarioController::class)->group(function(){
     Route::post('/{user:username}/posts/{post:titulo}', 'store' )->name('comentarios.store');
 });
 
-
 Route::controller(LikeController::class)->group(function(){
     Route::post('/posts/{post:titulo}/likes', 'store')->name('posts.likes.store');
     Route::delete('/posts/{post:titulo}/likes', 'destroy')->name('posts.likes.destroy');
+});
+
+Route::controller(FollowerController::class)->group(function(){
+    Route::post('/{user:username}/follow', 'store')->name('users.follow.store');
+    Route::delete('/{user:username}/unfollow', 'destroy')->name('users.unfollow.destroy');
 });
